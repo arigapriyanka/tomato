@@ -3,7 +3,7 @@ import { food_list,menu_list } from "../assets/assets";
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-
+    console.log(props)
     const [cartItems,setCartItems] = useState({});
     const [ordersData,setOrdersData] = useState({});
     
@@ -16,7 +16,7 @@ const StoreContextProvider = (props) => {
             setCartItems((prev)=>({...prev,[itemId]:prev[itemId]+1}));
         }
     }
-
+    //console.log(cartItems)
     const removeFromCart = (itemId) =>{
         setCartItems((prev)=>({...prev,[itemId]:prev[itemId]-1}))
     }
@@ -24,13 +24,18 @@ const StoreContextProvider = (props) => {
     const getTotalCartAmount = () => {
         let totalAmount = 0;
         for (const item in cartItems) {
-          if (cartItems[item] > 0) {
-            let itemInfo = food_list.find((product) => product.food_id === Number(item));
-            totalAmount += itemInfo.food_price * cartItems[item];
-          }
+            if (cartItems[item] > 0) {
+                const itemInfo = food_list.find(
+                    (product) => product.food_id === Number(item)
+                );
+                if (itemInfo) {
+                    totalAmount += itemInfo.food_price * cartItems[item];
+                }
+            }
         }
         return totalAmount;
-      }
+    };
+    
 
     const placeOrder = (deliveryData) =>{
 
